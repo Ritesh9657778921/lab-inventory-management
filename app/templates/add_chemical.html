@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Chemical - Lab Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Add New Chemical</h2>
+</div>
+
+<div class="form-panel">
+    <div id="alert-container"></div>
+    <form id="chemical-form" action="{{ url_for('main.add_chemical') }}" method="POST">
+        <div class="form-group">
+            <label for="name">Chemical Name</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" step="0.01" id="quantity" name="quantity" min="0" required>
+        </div>
+        <div class="form-group">
+            <label for="unit">Unit</label>
+            <input type="text" id="unit" name="unit" placeholder="grams, liters, mL" required>
+        </div>
+        <div class="form-group">
+            <label for="expiry_date">Expiry Date</label>
+            <input type="date" id="expiry_date" name="expiry_date" required>
+        </div>
+        <div class="form-group">
+            <label for="hazard_level">Hazard Level</label>
+            <select id="hazard_level" name="hazard_level" required>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Flammable">Flammable</option>
+                <option value="Toxic">Toxic</option>
+                <option value="Corrosive">Corrosive</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="storage_location">Storage Location</label>
+            <input type="text" id="storage_location" name="storage_location" placeholder="Shelf A1, Cabinet 2" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Chemical</button>
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </form>
+</div>
+{% endblock %}

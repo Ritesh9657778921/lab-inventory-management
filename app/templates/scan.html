@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Scan Chemical Code{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Scan Chemical Code</h2>
+</div>
+
+<div class="form-panel">
+    <form method="POST" action="{{ url_for('main.scan') }}" class="scan-form">
+        <div class="form-group">
+            <label for="code">Enter or scan barcode</label>
+            <input type="text" id="code" name="code" value="{{ code or '' }}" autofocus autocomplete="off" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Find Chemical</button>
+    </form>
+
+    {% if chemical %}
+    <div class="scan-result">
+        <h3>{{ chemical.name }}</h3>
+        <p><strong>ID:</strong> {{ chemical.id }}</p>
+        <p><strong>Quantity:</strong> {{ '%.2f' | format(chemical.quantity) }} {{ chemical.unit }}</p>
+        <p><strong>Expiry Date:</strong> {{ chemical.expiry_date.isoformat() }}</p>
+        <p><strong>Hazard Level:</strong> {{ chemical.hazard_level }}</p>
+        <p><strong>Storage Location:</strong> {{ chemical.storage_location }}</p>
+        <a href="{{ url_for('main.barcode_page', chemical_id=chemical.id) }}" class="btn btn-secondary">Print Barcode</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

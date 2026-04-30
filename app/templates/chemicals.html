@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Chemicals Inventory - Lab Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Chemicals Inventory</h2>
+</div>
+
+<div class="toolbar">
+    <form method="get" action="{{ url_for('main.chemicals') }}" class="search-form">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search by chemical name..." />
+        <button type="submit" class="btn">Search</button>
+        <a href="{{ url_for('main.add_chemical') }}" class="btn btn-primary">Add New Chemical</a>
+        <a href="{{ url_for('main.export_report') }}" class="btn btn-secondary">Export CSV</a>
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Expiry Date</th>
+            <th>Hazard Level</th>
+            <th>Storage Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for chemical in chemicals %}
+        {% set row_class = '' %}
+        {% if chemical.quantity < threshold %}
+            {% set row_class = 'low-stock-row' %}
+        {% elif chemical.expiry_date < today %}
+            {% set row_class = 'expired-row' %}
+        {% elif (chemical.expiry_date - today).days <= 30 %}
+            {% set row_class = 'expiring-row' %}
+        {% endif %}
+        <tr class="{{ row_class }}">
+            <td>{{ chemical.name }}</td>
+            <td>{{ '%.2f' | format(chemical.quantity) }}</td>
+            <td>{{ chemical.unit }}</td>
+            <td>{{ chemical.expiry_date.isoformat() }}</td>
+            <td>{{ chemical.hazard_level }}</td>
+            <td>{{ chemical.storage_location }}</td>
+            <td>
+                <a href="{{ url_for('main.barcode_page', chemical_id=chemical.id) }}" class="btn btn-small btn-secondary">Barcode</a>
+                <a href="{{ url_for('main.edit_chemical', chemical_id=chemical.id) }}" class="btn btn-small">Edit</a>
+                <form action="{{ url_for('main.delete_chemical', chemical_id=chemical.id) }}" method="POST" class="inline-form">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if not chemicals %}
+    <p class="empty-state">No chemical records found. Add a new chemical to get started.</p>
+{% endif %}
+
+{% endblock %}

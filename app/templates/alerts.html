@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Alerts - Lab Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Alerts</h2>
+</div>
+
+<div class="alerts-panel">
+    <section>
+        <h3>Low Stock Chemicals</h3>
+        {% if low_stock %}
+            <ul class="alert-list">
+                {% for chemical in low_stock %}
+                    <li>
+                        <strong>{{ chemical.name }}</strong> — Quantity: {{ '%.2f' | format(chemical.quantity) }} {{ chemical.unit }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No low stock chemicals.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h3>Expired Chemicals</h3>
+        {% if expired_chemicals %}
+            <ul class="alert-list">
+                {% for chemical in expired_chemicals %}
+                    <li>
+                        <strong>{{ chemical.name }}</strong> — Expired on {{ chemical.expiry_date.isoformat() }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No expired chemicals.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

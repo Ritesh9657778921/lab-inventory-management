@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Lab Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Dashboard</h2>
+</div>
+
+<div class="dashboard-grid">
+    <div class="card">
+        <h3>Total Chemicals</h3>
+        <p class="stat">{{ total_chemicals }}</p>
+    </div>
+    <div class="card">
+        <h3>Low Stock</h3>
+        <p class="stat">{{ low_stock_count }}</p>
+    </div>
+    <div class="card">
+        <h3>Expired Chemicals</h3>
+        <p class="stat">{{ expired_count }}</p>
+    </div>
+</div>
+
+<div class="alerts-panel">
+    <h3>Alerts</h3>
+    {% if alerts %}
+        <ul>
+            {% for alert in alerts %}
+                <li>{{ alert }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No alerts at this time.</p>
+    {% endif %}
+</div>
+
+{% if low_stock_items or expired_chemicals %}
+<div class="alert-summary">
+    {% if low_stock_items %}
+        <div class="alert-box warning">
+            {{ low_stock_items|length }} chemical(s) are below the low-stock threshold.
+        </div>
+    {% endif %}
+    {% if expired_chemicals %}
+        <div class="alert-box danger">
+            {{ expired_chemicals|length }} chemical(s) have expired.
+        </div>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}
